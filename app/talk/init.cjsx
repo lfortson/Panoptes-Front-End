@@ -8,6 +8,13 @@ Moderation = require './lib/moderation'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 
+ROLES = [       # Can access:
+  "admin"       # admin, moderator, ream, all
+  "moderator"   # moderator, team, all
+  "team"        # team, all
+  "all"         # all *
+  ]
+
 module?.exports = React.createClass
   displayName: 'TalkInit'
 
@@ -63,6 +70,12 @@ module?.exports = React.createClass
   tag: (t, i) ->
     <p>#{t.name}</p>
 
+  roleReadLabel: (data, i) ->
+    <label><input type="radio" name="role-read"/>{data}</label>
+
+  roleWriteLabel: (data, i) ->
+    <label><input type="radio" name="role-write"/>{data}</label>
+
   render: ->
     <div className="talk-home">
       <Moderation>
@@ -70,7 +83,15 @@ module?.exports = React.createClass
           <h2>Moderator Zone:</h2>
           <h3>Add a board:</h3>
           <input type="text" ref="boardTitle" placeholder="Board Title"/>
+
           <textarea type="text" ref="boardDescription" placeholder="Board Description"></textarea><br />
+          
+          <h3>Can Read:</h3>
+          <div>{ROLES.map(@roleReadLabel)}</div>
+
+          <h3>Can Write:</h3>
+          <div>{ROLES.map(@roleWriteLabel)}</div>
+
           <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
         </form>
       </Moderation>
@@ -82,6 +103,7 @@ module?.exports = React.createClass
            else
             <p>There are currently no boards.</p>}
         </section>
+
 
         <div className="talk-sidebar">
           <h2>Talk Sidebar</h2>
