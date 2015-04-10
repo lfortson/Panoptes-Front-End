@@ -7,13 +7,7 @@ PromiseRenderer = require '../components/promise-renderer'
 Moderation = require './lib/moderation'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
-
-ROLES = [       # Can access:
-  "admin"       # admin, moderator, ream, all
-  "moderator"   # moderator, team, all
-  "team"        # team, all
-  "all"         # all *
-  ]
+ROLES = require './lib/roles'
 
 module?.exports = React.createClass
   displayName: 'TalkInit'
