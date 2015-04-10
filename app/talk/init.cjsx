@@ -48,11 +48,16 @@ module?.exports = React.createClass
     titleInput = @getDOMNode().querySelector('form input')
     descriptionInput = @getDOMNode().querySelector('form textarea')
 
+    # permissions
+    read = @getDOMNode().querySelector(".roles-read input[name='role-read']:checked").value
+    write = @getDOMNode().querySelector(".roles-write input[name='role-write']:checked").value
+    permissions = {read, write}
+
     title = titleInput.value
     description = descriptionInput.value
     section = @props.section
 
-    board = {title, description, section}
+    board = {title, description, section, permissions}
     return console.log "failed validation" unless title and description and section
 
     talkClient.type('boards').create(board).save()
@@ -71,10 +76,10 @@ module?.exports = React.createClass
     <p>#{t.name}</p>
 
   roleReadLabel: (data, i) ->
-    <label><input type="radio" name="role-read"/>{data}</label>
+    <label><input type="radio" name="role-read" value={data}/>{data}</label>
 
   roleWriteLabel: (data, i) ->
-    <label><input type="radio" name="role-write"/>{data}</label>
+    <label><input type="radio" name="role-write" value={data}/>{data}</label>
 
   render: ->
     <div className="talk-home">
@@ -86,11 +91,11 @@ module?.exports = React.createClass
 
           <textarea type="text" ref="boardDescription" placeholder="Board Description"></textarea><br />
           
-          <h3>Can Read:</h3>
-          <div>{ROLES.map(@roleReadLabel)}</div>
+          <h4>Can Read:</h4>
+          <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
 
-          <h3>Can Write:</h3>
-          <div>{ROLES.map(@roleWriteLabel)}</div>
+          <h4>Can Write:</h4>
+          <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
 
           <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
         </form>
