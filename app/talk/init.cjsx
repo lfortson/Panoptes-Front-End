@@ -17,7 +17,7 @@ module?.exports = React.createClass
     discussionsMeta: {}
 
   propTypes:
-    section: React.PropTypes.string # 'zooniverse' for main-talk, 'project_id' for projects
+    section: React.PropTypes.string # 'zooniverse' for main-talk, 'project_name-project_id' for projects
 
   componentWillMount: ->
     @setBoards()
@@ -84,7 +84,7 @@ module?.exports = React.createClass
           <input type="text" ref="boardTitle" placeholder="Board Title"/>
 
           <textarea type="text" ref="boardDescription" placeholder="Board Description"></textarea><br />
-          
+
           <h4>Can Read:</h4>
           <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
 

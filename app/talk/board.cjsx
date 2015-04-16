@@ -11,6 +11,7 @@ ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 Paginator = require './lib/paginator'
 Moderation = require './lib/moderation'
+ROLES = require './lib/roles'
 
 module?.exports = React.createClass
   displayName: 'TalkBoard'
@@ -53,6 +54,7 @@ module?.exports = React.createClass
       .catch (e) => console.log "failed to get board", e
 
   onSubmitDiscussion: (e, commentText, focusImage) ->
+    e.preventDefault()
     titleInput = @getDOMNode().querySelector('.talk-board-new-discussion input')
     title = titleInput.value
 
@@ -99,18 +101,34 @@ module?.exports = React.createClass
   onPageChange: (page) ->
     @goToPage(page)
 
-  onEditTitle: (e) ->
-    input = document.querySelector('.talk-edit-board-title-form input')
+  onEditBoard: (e) ->
+    e.preventDefault()
+    form = document.querySelector('.talk-edit-board-form')
+    input = form.querySelector('input')
     title = input.value
 
-    @boardRequest().update({title}).save()
+    read = @getDOMNode().querySelector(".roles-read input[name='role-read']:checked").value
+    write = @getDOMNode().querySelector(".roles-write input[name='role-write']:checked").value
+    permissions = {read, write}
+    board = {title, permissions}
+
+    @boardRequest().update(board).save()
       .then (board) =>
+        console.log "board", board
         @setState {board: board[0]}
       .catch (e) ->
         console.log "error on edit board title", e
 
   onClickNewDiscussion: ->
     @setState newDiscussionOpen: !@state.newDiscussionOpen
+
+  roleReadLabel: (data, i) ->
+    # checked = @state.board.permissions?.read is data # to pre fill once ready
+    <label><input type="radio" name="role-read" value={data}/>{data}</label>
+
+  roleWriteLabel: (data, i) ->
+    # checked = @state.board.permissions?.read is data # to pre fill once ready
+    <label><input type="radio" name="role-write" value={data}/>{data}</label>
 
   render: ->
     <div className="talk-board">
@@ -119,10 +137,17 @@ module?.exports = React.createClass
         <div>
           <h2>Moderator Zone:</h2>
           {if @state.board?.title
-            <form className="talk-edit-board-title-form" onSubmit={@onEditTitle}>
+            <form className="talk-edit-board-form" onSubmit={@onEditBoard}>
               <h3>Edit Title:</h3>
               <input onChange={@onChangeTitle} defaultValue={@state.board?.title}/>
-              <button type="submit">Update Title</button>
+
+              <h4>Can Read:</h4>
+              <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
+
+              <h4>Can Write:</h4>
+              <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
+
+              <button type="submit">Update Board</button>
             </form>}
 
           <button onClick={@onClickDeleteBoard}>
