@@ -17,7 +17,7 @@ App = React.createClass
       <MainFooter />
     </div>
 
-routes = <Route handler={App}> a
+routes = <Route handler={App}>
   <DefaultRoute name="home" handler={require './pages/home'} />
 
   <Route path="account" handler={require './pages/sign-in'}>
