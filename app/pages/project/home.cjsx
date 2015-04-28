@@ -42,6 +42,5 @@ module.exports = React.createClass
       </div>
 
       <hr />
-
       <Markdown className="introduction content-container">{@props.project.introduction ? ''}</Markdown>
     </div>

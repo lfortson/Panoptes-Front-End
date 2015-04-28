@@ -17,7 +17,7 @@ App = React.createClass
       <MainFooter />
     </div>
 
-routes = <Route handler={App}>
+routes = <Route handler={App}> a
   <DefaultRoute name="home" handler={require './pages/home'} />
 
   <Route path="account" handler={require './pages/sign-in'}>
@@ -62,7 +62,8 @@ routes = <Route handler={App}>
   </Route>
 
   <Route name="collections" path="collections" handler={require './collections'}>
-    <DefaultRoute name="collections-index" handler={require './collections/index'} />
+    <DefaultRoute name="collections-index" handler={require './collections/home'} />
+    <Route name="collections-show" path="user/show" handler={require './collections/show'} />
   </Route>
 
   <Route name="lab" handler={require './pages/lab'} />
