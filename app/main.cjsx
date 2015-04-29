@@ -63,7 +63,7 @@ routes = <Route handler={App}>
 
   <Route name="collections" path="collections" handler={require './collections'}>
     <DefaultRoute name="collections-index" handler={require './collections/home'} />
-    <Route name="collections-show" path="user/show" handler={require './collections/show'} />
+    <Route name="collections-show" path=":collection_id" handler={require './collections/show'} />
   </Route>
 
   <Route name="lab" handler={require './pages/lab'} />

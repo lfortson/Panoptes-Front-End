@@ -2,8 +2,6 @@ React = require 'react'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
 
-# need a project_id, display_name
-
 module?.exports = React.createClass
   displayName: 'CollectionsCreateForm'
 
@@ -13,13 +11,13 @@ module?.exports = React.createClass
     input = form.querySelector('input')
 
     display_name = input.value
-    # project_id = 76 # Snapshot Supernova
-    input.value = ''
+    # links = {project: 76} # optional project attachment
+    collection = {display_name, links}
 
-    collection = {display_name}
     apiClient.type('collections').create(collection).save()
       .then (collection) =>
         console.log "collection created", collection
+        input.value = ''
       .catch (e) ->
         throw new Error('Failed to create collection:', e)
 
