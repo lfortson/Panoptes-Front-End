@@ -5,7 +5,7 @@
     "animated-scrollto": "~1.1.0",
     "counterpart": "~0.16.7",
     "debounce": "~1.0.0",
-    "json-api-client": "~0.2.3",
+    "json-api-client": "~0.2.6",
     "lodash.merge": "~2.4.1",
     "markdown-it": "~4.0.1",
     "markdown-it-container": "~1.0.0",

@@ -9,6 +9,9 @@ module?.exports = React.createClass
   componentWillMount: ->
     @promiseToSetState collection: talkClient.type('collections').get({id: @props.params?.collection_id}).index(0)
 
+  componentWillUpdate: (p, s) ->
+    console.log "state.collection", s.collection
+
   render: ->
     <div className="talk-image-collection">
       Collection Show:

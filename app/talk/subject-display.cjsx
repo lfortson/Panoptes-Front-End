@@ -10,14 +10,59 @@ module?.exports = React.createClass
   propTypes:
     focusId: React.PropTypes.number
 
+  getInitialState: ->
+    collectionFormOpen: true
+
+  toggleCollectionForm: (e) ->
+    @setState collectionFormOpen: !@state.collectionFormOpen
+
+  componentDidMount: ->
+    apiClient.type('collections').get('3')
+      .then (c) =>
+        console.log "c", c
+      .catch (alex) -> console.log "I caught alex", alex
+
+  toggleCollectionMembership: (collectionId) ->
+    apiClient.type('collections', {})
+      .get(collectionId.toString())
+        .then (collection) =>
+          collection.addLink('subjects', [@props.focusId.toString()])
+            .then (coll) =>
+              console.log "collection subjects added", collection
+      .catch (e) -> console.log "error add subject to coll", e
+
+  collectionCheckbox: (d, i) ->
+    <label key={i} >
+      <input
+        type="checkbox"
+        onChange={=> @toggleCollectionMembership(d.id)} />
+        {d.display_name}
+    </label>
+
   render: ->
     <div className="talk-subject-display">
       <PromiseRenderer promise={apiClient.type('subjects').get(@props.focusId.toString())}>{(subject) =>
+
         <div>
+          {if @state.collectionFormOpen
+            <div>
+              <h1>Collect!</h1>
+              <PromiseRenderer promise={apiClient.type('collections').get()}>{(collections) =>
+                <div>
+                  <div>{collections.map(@collectionCheckbox)}</div>
+                  {#or <input type="text" placeholder="Start a new collection" />}
+                </div>
+              }</PromiseRenderer>
+            </div>
+            }
+
           <a href={getSubjectLocation(subject).src} target="_blank">
             <img src={getSubjectLocation(subject).src} />
           </a>
           <p>Subject {subject.id}</p>
+          <span onClick={@toggleCollectionForm}>
+            <i className="fa fa-th" />
+          </span>
         </div>
       }</PromiseRenderer>
     </div>
