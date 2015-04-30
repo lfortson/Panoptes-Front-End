@@ -30,11 +30,6 @@ TALK_MARGIN = 10px auto
     display: block
 
 
-.polaroid-border
-  background: #fff
-  padding: 10px 10px 20px 10px
-  margin: 10px
-
 .talk
   @extend .talk-form
 
@@ -118,7 +113,7 @@ TALK_MARGIN = 10px auto
 
   .talk-subject-display
     @extend .talk-module
-    @extend .polaroid-border
+    @extend .polaroid-image
     display: inline-block
     text-align: center
 
@@ -246,7 +241,7 @@ TALK_MARGIN = 10px auto
         white-space: nowrap
 
       .talk-comment-image-item
-        @extend .polaroid-border
+        @extend .polaroid-image
         position: relative
         display: inline-block
 

@@ -1,6 +1,7 @@
 React = require 'react'
 PromiseToSetState = require '../lib/promise-to-set-state'
 talkClient = require '../api/talk'
+getSubjectLocation = require '../lib/get-subject-location'
 
 module?.exports = React.createClass
   displayName: 'CollectionShow'
@@ -17,15 +18,14 @@ module?.exports = React.createClass
       }
 
   componentWillUpdate: (p, s) ->
-    console.log "state.collection", s.collection
     console.log "s.subjects", s.subjects
 
   subject: (d, i) ->
-    <p key={i}>{d}</p>
+    <img key={i} src={'http://' + getSubjectLocation(d).src} />
 
   render: ->
-    <div className="talk-image-collection">
+    <div className="collections-show">
       Collection Show:
-      {@state.collection?.display_name}
-      {@state.subjects.map(@subject)}
+      <section>{@state.collection?.display_name}</section>
+      <section>{@state.subjects.map(@subject)}</section>
     </div>
