@@ -58,13 +58,13 @@ module?.exports = React.createClass
     <BoardPreview {...@props} key={i} data={data} />
 
   tag: (t, i) ->
-    <p>#{t.name}</p>
+    <p key={i}>#{t.name}</p>
 
   roleReadLabel: (data, i) ->
-    <label><input type="radio" name="role-read" value={data}/>{data}</label>
+    <label key={i}><input type="radio" name="role-read" value={data}/>{data}</label>
 
   roleWriteLabel: (data, i) ->
-    <label><input type="radio" name="role-write" value={data}/>{data}</label>
+    <label key={i}><input type="radio" name="role-write" value={data}/>{data}</label>
 
   render: ->
     <div className="talk-home">
@@ -93,7 +93,6 @@ module?.exports = React.createClass
            else
             <p>There are currently no boards.</p>}
         </section>
-
 
         <div className="talk-sidebar">
           <h2>Talk Sidebar</h2>
