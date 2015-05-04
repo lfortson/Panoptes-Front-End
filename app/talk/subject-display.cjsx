@@ -3,6 +3,7 @@ apiClient = require '../api/client'
 getSubjectLocation = require '../lib/get-subject-location'
 PromiseRenderer = require '../components/promise-renderer'
 loadImage = require '../lib/load-image'
+FavoritesButton = require '../collections/favorites-button'
 
 module?.exports = React.createClass
   displayName: 'TalkSubjectDisplay'
@@ -50,7 +51,7 @@ module?.exports = React.createClass
               <PromiseRenderer promise={apiClient.type('collections').get()}>{(collections) =>
                 <div>
                   <div>{collections.map(@collectionCheckbox)}</div>
-                  {#or <input type="text" placeholder="Start a new collection" />}
+                  <FavoritesButton subject={subject} />
                 </div>
               }</PromiseRenderer>
             </div>
