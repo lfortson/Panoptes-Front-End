@@ -8,6 +8,7 @@ Moderation = require './lib/moderation'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 ROLES = require './lib/roles'
+auth = require '../api/auth'
 
 module?.exports = React.createClass
   displayName: 'TalkInit'
@@ -22,11 +23,12 @@ module?.exports = React.createClass
     @setBoards()
 
   setBoards: ->
-    talkClient.type('boards').get(section: @props.section)
-      .then (boards) =>
-        @setState {boards}
-      .catch (e) =>
-        console.log "error getting boards"
+    auth.checkCurrent().then =>
+      talkClient.type('boards').get(section: @props.section)
+        .then (boards) =>
+          @setState {boards}
+        .catch (e) =>
+          console.log "error getting boards"
 
   onSubmitBoard: (e) ->
     e.preventDefault()
