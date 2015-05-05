@@ -47,7 +47,7 @@ module?.exports = React.createClass
               if subject
                 @removeSubjectFrom(favorites)
               else
-                console.log "no subject", subject
+                @addSubjectTo(favorites)
             .catch (e) -> throw new Error(e)
         else
           @createFavorites()
