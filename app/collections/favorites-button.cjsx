@@ -2,49 +2,59 @@ React = require 'react'
 apiClient = require '../api/client'
 
 module?.exports = React.createClass
-  displayName: 'FavoritesButton'
+  displayName: 'CollectionFavoritesButton'
 
   propTypes:
     subject: React.PropTypes.object # subject response from panoptes
 
-  onClick: (e) ->
-    console.log "onClick fave button", e
+  addSubjectTo: (collection) ->
+    collection.addLink('subjects', [@props.subject.id.toString()])
+      .then (collection) =>
+        console.log "subject added to #{collection.display_name}"
+        # update ui-state here
+      .catch (e) -> throw new Error(e)
+
+  removeSubjectFrom: (collection) ->
+    collection.removeLink('subjects', [@props.subject.id.toString()])
+      .then (collection) =>
+        console.log "subject removed from #{collection.display_name}"
+        # update ui-state here
+      .catch (e) -> throw new Error(e)
 
   createFavorites: ->
-    console.log "creating favorites coll"
     display_name = 'favorites'
     project = @props.subject.links.project
     links = {project}
     collection = {display_name, links}
 
     apiClient.type('collections').create(collection).save()
-      .then (collection) =>
-        console.log "favorites saved", collection
+      .then (favorites) => @addSubjectTo(favorites)
       .catch (e) -> throw new Error(e)
 
-  addSubjectToFavorites: ->
-    return "TODO - add subject to favorites"
-
-  componentDidMount: ->
+  toggleFavorite: ->
     project_id = @props.subject.links.project
-    name = 'favorites'
+    display_name = 'favorites'
 
     # check for a favorites collection in project first
-    apiClient.type('collections').get({project_id, name})
+    apiClient.type('collections').get({project_id, display_name}).index(0)
       .then (favorites) =>
-        console.log "favorites", favorites
-        if favorites?.length
-          # add subject to favorites
-          # set favorited display
-          console.log "found favorites coll"
+        if !!favorites
+          console.log "favorites.id", favorites.id
+
+          # try to request subject from favorites
+          apiClient.type('subjects').get(collection_id: favorites.id, id: @props.subject.id).index(0)
+            .then (subject) =>
+              if subject
+                @removeSubjectFrom(favorites)
+              else
+                console.log "no subject", subject
+            .catch (e) -> throw new Error(e)
         else
-          # create favorites, then add subject to it
-          console.log "didn't find favorites, better create it..."
           @createFavorites()
 
   render: ->
     <button
       className="favorites-button"
-      onClick={@onClick}>
+      onClick={@toggleFavorite}>
       <i className="fa fa-heart" />
     </button>

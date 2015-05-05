@@ -17,12 +17,6 @@ module?.exports = React.createClass
   toggleCollectionForm: (e) ->
     @setState collectionFormOpen: !@state.collectionFormOpen
 
-  componentDidMount: ->
-    apiClient.type('collections').get('3')
-      .then (c) =>
-        console.log "c", c
-      .catch (alex) -> console.log "I caught alex", alex
-
   toggleCollectionMembership: (collectionId) ->
     apiClient.type('collections', {})
       .get(collectionId.toString())
@@ -30,7 +24,7 @@ module?.exports = React.createClass
           collection.addLink('subjects', [@props.focusId.toString()])
             .then (coll) =>
               console.log "collection subjects added", collection
-      .catch (e) -> console.log "error add subject to coll", e
+            .catch (e) -> console.log "error add subject to coll", e
 
   collectionCheckbox: (d, i) ->
     <label key={i} >
