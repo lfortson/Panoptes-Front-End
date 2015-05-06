@@ -5,7 +5,7 @@ module?.exports = React.createClass
   displayName: 'CollectionFavoritesButton'
 
   propTypes:
-    subject: React.PropTypes.object # subject response from panoptes
+    subject: React.PropTypes.object # a subject response from panoptes
 
   getInitialState: ->
     favorited: false
@@ -13,27 +13,22 @@ module?.exports = React.createClass
   componentWillMount: ->
     project_id = @props.subject.links.project
     display_name = 'favorites'
+
     apiClient.type('collections').get({project_id, display_name}).index(0)
       .then (favorites) =>
         if !!favorites
-          apiClient.type('subjects').get(collection_id: favorites.id, id: @props.subject.id).index(0).then (subject) =>
-              @setState favorited: !!subject
+          apiClient.type('subjects').get(collection_id: favorites.id, id: @props.subject.id).index(0)
+            .then (subject) => @setState favorited: !!subject
             .catch (e) -> throw new Error(e)
 
   addSubjectTo: (collection) ->
     collection.addLink('subjects', [@props.subject.id.toString()])
-      .then (collection) =>
-        console.log "subject added to #{collection.display_name}"
-        # update ui-state here
-        @setState favorited: true
+      .then (collection) => @setState favorited: true
       .catch (e) -> throw new Error(e)
 
   removeSubjectFrom: (collection) ->
     collection.removeLink('subjects', [@props.subject.id.toString()])
-      .then (collection) =>
-        console.log "subject removed from #{collection.display_name}"
-        # update ui-state here
-        @setState favorited: false
+      .then (collection) => @setState favorited: false
       .catch (e) -> throw new Error(e)
 
   createFavorites: ->
@@ -52,11 +47,11 @@ module?.exports = React.createClass
 
     # check for a favorites collection in project first
     apiClient.type('collections').get({project_id, display_name}).index(0)
-      .then (favorites) =>
-        if !!favorites
-          console.log "favorites.id", favorites.id
 
-          # try to request subject from favorites
+      .then (favorites) =>
+        # try to request subject from favorites collection, otherwise create it
+
+        if !!favorites
           apiClient.type('subjects').get(collection_id: favorites.id, id: @props.subject.id).index(0)
             .then (subject) =>
               if subject
