@@ -1,6 +1,7 @@
 React = require 'react'
 PromiseToSetState = require '../lib/promise-to-set-state'
 talkClient = require '../api/talk'
+apiClient = require '../api/client'
 getSubjectLocation = require '../lib/get-subject-location'
 Paginator = require '../talk/lib/paginator'
 {Navigation} = require 'react-router'
@@ -18,10 +19,11 @@ module?.exports = React.createClass
     @setData(1)
 
   subjectsRequest: (page) ->
-    talkClient.type('subjects').get({page})
+    collection_id = @props.params?.collection_id
+    apiClient.type('subjects').get({page, collection_id})
 
   collectionRequest: ->
-    talkClient.type('collections').get({id: @props.params?.collection_id}).index(0)
+    apiClient.type('collections').get({id: +@props.params?.collection_id}).index(0)
 
   setData: (page) ->
     @subjectsRequest(page).then (subjects) =>
@@ -39,7 +41,8 @@ module?.exports = React.createClass
     console.log "s.subjects", s.subjects
 
   subject: (d, i) ->
-    <img key={i} src={'http://' + getSubjectLocation(d).src} />
+    # 'http://' may need to prefix some older subjects...
+    <img key={i} src={getSubjectLocation(d).src} />
 
   render: ->
     <div className="collections-show">
