@@ -24,7 +24,7 @@ module?.exports = React.createClass
           collection.addLink('subjects', [@props.focusId.toString()])
             .then (coll) =>
               console.log "collection subjects added", collection
-            .catch (e) -> console.log "error add subject to coll", e
+            .catch (e) -> throw new Error(e)
 
   collectionCheckbox: (d, i) ->
     <label key={i} >

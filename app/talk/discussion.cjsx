@@ -61,13 +61,12 @@ module?.exports = React.createClass
         commentsMeta = comments[0]?.getMeta()
         @setState {comments, commentsMeta}, =>
           callback?()
-      .catch (e) =>
-        console.log "e", e
+      .catch (e) => throw new Error(e)
 
   setDiscussion: ->
     @discussionsRequest()
       .then (discussion) => @setState {discussion: discussion[0]}
-      .catch (e) => console.log "e", e
+      .catch (e) => throw new Error(e)
 
   onUpdateComment: (textContent, focusImage, commentId) ->
     {discussion} = @props.params
@@ -81,15 +80,14 @@ module?.exports = React.createClass
     commentToUpdate.update(comment).save()
       .then (comment) =>
         @setComments()
-      .catch (e) =>
-        console.log "comment update error", e
+      .catch (e) => throw new Error(e)
 
   onDeleteComment: (commentId) ->
     {board, discussion} = @props.params
     if window.confirm("Are you sure that you want to delete this comment?")
       talkClient.type('comments').get(id: commentId).delete()
         .then (deleted) => @setComments()
-        .catch (e) => console.log "error deleting comment", e
+        .catch (e) => throw new Error(e)
 
   onSubmitComment: (e, textContent, focusImage) ->
     {discussion} = @props.params
@@ -102,8 +100,8 @@ module?.exports = React.createClass
     talkClient.type('comments').create(comment).save()
       .then (comment) =>
         @setComments(@state.commentsMeta?.page, => @goToPage(@state.commentsMeta?.page_count))
-      .catch (e) =>
-        console.log "comment create error", e
+      .catch (e) => throw new Error(e)
+
 
   onLikeComment: (commentId) ->
     user = @state.user
@@ -116,8 +114,7 @@ module?.exports = React.createClass
         talkClient.request('put', voteUrl, null, {})
           .then (voted) =>
             @setComments(@state.commentsMeta?.page)
-          .catch (e) -> console.log "error upvoting", e
-      .then (e) -> console.log "error retreiving liked comment"
+          .catch (e) -> throw new Error(e)
 
   onClickReply: (user, comment) ->
     # TODO: provide link to user / comment
@@ -143,7 +140,7 @@ module?.exports = React.createClass
         .then (deleted) =>
           @setComments()
           @transitionTo('talk')
-        .catch (e) -> console.log "error deleting", e
+        .catch (e) -> throw new Error(e)
 
   commentValidations: (commentBody) ->
     # TODO: return true if any additional validations fail
@@ -158,8 +155,7 @@ module?.exports = React.createClass
     @discussionsRequest().update({title}).save()
       .then (discussion) =>
         @setState {discussion: discussion[0]}
-      .catch (e) ->
-        console.log "error on edit board title", e
+      .catch (e) -> throw new Error(e)
 
   render: ->
     <div className="talk-discussion">

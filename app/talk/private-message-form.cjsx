@@ -23,7 +23,7 @@ module?.exports = React.createClass
     authClient.checkCurrent()
       .then (user) =>
         @setState {user}
-      .catch (e) -> console.log "error checking current auth inbox", e
+      .catch (e) -> throw new Error(e)
 
   onSubmit: (e) ->
     e.preventDefault()
@@ -38,7 +38,6 @@ module?.exports = React.createClass
 
     apiClient.type('users').get(display_name: @props.params.name).index(0)
       .then (user) =>
-        console.log "user", user
         recipient_ids = [+user.id] # must be array
         conversation = {title, body, user_id, recipient_ids}
 
@@ -48,9 +47,7 @@ module?.exports = React.createClass
           .then (conversation) =>
             console.log "conversation save successful", conversation
             @transitionTo('inbox-conversation', {conversation: conversation.id})
-
-          .catch (e) ->
-            console.log "e conversation", e
+          .catch (e) -> throw new Error(e)
 
   render: ->
     <div className="talk talk-module">

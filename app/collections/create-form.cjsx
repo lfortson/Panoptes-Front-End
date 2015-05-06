@@ -19,7 +19,7 @@ module?.exports = React.createClass
         console.log "collection created", collection
         input.value = ''
       .catch (e) ->
-        throw new Error("Failed to create collection: #{e}")
+        throw new Error(e)
 
   render: ->
     <div>

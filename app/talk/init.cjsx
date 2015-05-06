@@ -27,8 +27,7 @@ module?.exports = React.createClass
       talkClient.type('boards').get(section: @props.section)
         .then (boards) =>
           @setState {boards}
-        .catch (e) =>
-          console.log "error getting boards"
+        .catch (e) => throw new Error(e)
 
   onSubmitBoard: (e) ->
     e.preventDefault()
@@ -53,8 +52,7 @@ module?.exports = React.createClass
         descriptionInput.value = ''
         console.log "board save successul", board
         @setBoards()
-      .catch (e) =>
-        console.log "error saving board", e
+      .catch (e) => throw new Error(e)
 
   boardPreview: (data, i) ->
     <BoardPreview {...@props} key={i} data={data} />

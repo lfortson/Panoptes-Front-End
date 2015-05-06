@@ -28,7 +28,7 @@ module?.exports = React.createClass
           @setState {user}, @setConversation
         else
           @setState {user: null} # don't want the callback without a user...
-      .catch (e) -> console.log "error checking current auth inbox", e
+      .catch (e) -> throw new Error(e)
 
   setConversation: ->
     conversation_id = @props.params?.conversation?.toString()
@@ -36,7 +36,7 @@ module?.exports = React.createClass
     talkClient.type('conversations').get(conversation_id, skipCache: true)
       .then (conversation) =>
         @setState {conversation}, @setMessagesMeta
-      .catch (e) -> console.log "error setting conversation", e
+      .catch (e) -> throw new Error(e)
 
   setMessagesMeta: ->
     conversation_id = +@props.params.conversation
@@ -45,7 +45,7 @@ module?.exports = React.createClass
         messagesMeta = messages[0]?.getMeta()
         console.log "messagesMeta", messagesMeta
         @setState {messagesMeta}, => @setMessages(messagesMeta.count)
-      .catch (e) -> console.log "e meta", e
+      .catch (e) -> throw new Error(e)
 
   setMessages: (count = 10) ->
     conversation_id = +@props.params.conversation
@@ -53,7 +53,7 @@ module?.exports = React.createClass
       .then (messages) =>
         messagesMeta = messages[0].getMeta()
         @setState {messages, messagesMeta}
-      .catch (e) -> console.log "error setting messages", e
+      .catch (e) -> throw new Error(e)
 
   message: (data, i) ->
     <div className="conversation-message" key={i}>
@@ -79,8 +79,7 @@ module?.exports = React.createClass
       .then (message) =>
         @setConversation()
         textarea.value = ''
-      .catch (e) ->
-        console.log "e message create", e
+      .catch (e) -> throw new Error(e)
 
   render: ->
     <div className="inbox-conversation content-container">

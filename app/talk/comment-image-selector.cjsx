@@ -19,8 +19,7 @@ module?.exports = React.createClass
     authClient.checkCurrent()
       .then (user) => user.get('recents')
         .then (recents) => @setState {recents}
-      .catch (e) ->
-        console.log "error setting recents", e
+      .catch (e) -> throw new Error(e)
 
   queryForImages: (query) ->
     # this will make a db query and then return array of matching images
@@ -41,7 +40,7 @@ module?.exports = React.createClass
     recentsData.get('subject')
       .then (subject) =>
         @props.onSelectImage(subject)
-      .catch (e) -> console.log "couldent get subject data", e
+      .catch (e) -> throw new Error(e)
 
   imageItem: (data, i) ->
     {src} = getSubjectLocation(data)

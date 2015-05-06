@@ -19,7 +19,7 @@ module?.exports = React.createClass
       user.get('collections')
         .then (collections) =>
           @setState {collections}
-        .catch (e) -> throw new Error('Error getting collections', e)
+        .catch (e) -> throw new Error(e)
 
   collectionLink: (d, i) ->
     <div key={i}>
@@ -30,7 +30,6 @@ module?.exports = React.createClass
 
   render: ->
     <div className="collections-home">
-      <h1>Collections Home</h1>
       <CollectionCreateForm />
       {@state.collections.map(@collectionLink)}
     </div>

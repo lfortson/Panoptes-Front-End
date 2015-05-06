@@ -40,8 +40,7 @@ module?.exports = React.createClass
       .then (discussions) =>
         discussionsMeta = discussions[0]?.getMeta()
         @setState {discussions, discussionsMeta}
-      .catch (e) =>
-        console.log "failed to get discussion", e
+      .catch (e) => throw new Error(e)
 
   boardRequest: ->
     id = +@props.params.board
@@ -50,7 +49,7 @@ module?.exports = React.createClass
   setBoard: ->
     @boardRequest()
       .then (board) => @setState {board: board[0]}
-      .catch (e) => console.log "failed to get board", e
+      .catch (e) => throw new Error(e)
 
   onSubmitDiscussion: (e, commentText, focusImage) ->
     titleInput = @getDOMNode().querySelector('.talk-board-new-discussion input')
@@ -71,9 +70,7 @@ module?.exports = React.createClass
             console.log "discussion save successful", discussion
             @setState newDiscussionOpen: false
             @setDiscussions()
-          .catch (e) =>
-            console.log "error saving discussion", e
-      .catch (e) => console.log "error checking auth", e
+          .catch (e) => throw new Error(e)
 
   discussionValidations: (commentBody) ->
     # TODO: return true if any additional validations fail
@@ -94,7 +91,7 @@ module?.exports = React.createClass
         .then (deleted) =>
           console.log "deleted", deleted
           @transitionTo('talk')
-        .catch (e) -> console.log "error deleting", e
+        .catch (e) -> throw new Error(e)
 
   onPageChange: (page) ->
     @goToPage(page)
@@ -106,8 +103,7 @@ module?.exports = React.createClass
     @boardRequest().update({title}).save()
       .then (board) =>
         @setState {board: board[0]}
-      .catch (e) ->
-        console.log "error on edit board title", e
+      .catch (e) -> throw new Error(e)
 
   onClickNewDiscussion: ->
     @setState newDiscussionOpen: !@state.newDiscussionOpen
@@ -179,5 +175,4 @@ module?.exports = React.createClass
       </div>
 
       <Paginator page={+@state.discussionsMeta?.page} onPageChange={@onPageChange} pageCount={@state.discussionsMeta?.page_count} />
-
     </div>
