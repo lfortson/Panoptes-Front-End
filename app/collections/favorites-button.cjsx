@@ -7,11 +7,25 @@ module?.exports = React.createClass
   propTypes:
     subject: React.PropTypes.object # subject response from panoptes
 
+  getInitialState: ->
+    favorited: false
+
+  componentWillMount: ->
+    project_id = @props.subject.links.project
+    display_name = 'favorites'
+    apiClient.type('collections').get({project_id, display_name}).index(0)
+      .then (favorites) =>
+        if !!favorites
+          apiClient.type('subjects').get(collection_id: favorites.id, id: @props.subject.id).index(0).then (subject) =>
+              @setState favorited: !!subject
+            .catch (e) -> throw new Error(e)
+
   addSubjectTo: (collection) ->
     collection.addLink('subjects', [@props.subject.id.toString()])
       .then (collection) =>
         console.log "subject added to #{collection.display_name}"
         # update ui-state here
+        @setState favorited: true
       .catch (e) -> throw new Error(e)
 
   removeSubjectFrom: (collection) ->
@@ -19,6 +33,7 @@ module?.exports = React.createClass
       .then (collection) =>
         console.log "subject removed from #{collection.display_name}"
         # update ui-state here
+        @setState favorited: false
       .catch (e) -> throw new Error(e)
 
   createFavorites: ->
@@ -56,5 +71,5 @@ module?.exports = React.createClass
     <button
       className="favorites-button"
       onClick={@toggleFavorite}>
-      <i className="fa fa-heart" />
+      <i className="fa fa-heart#{if @state.favorited then '' else '-o'}" />
     </button>
