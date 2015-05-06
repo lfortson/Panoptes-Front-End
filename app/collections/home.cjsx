@@ -2,6 +2,7 @@ React = require 'react'
 CollectionCreateForm = require './create-form'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
+auth = require '../api/auth'
 {Link} = require 'react-router'
 
 module?.exports = React.createClass
@@ -14,10 +15,11 @@ module?.exports = React.createClass
     @setCollections()
 
   setCollections: ->
-    talkClient.type('collections').get()
-      .then (collections) =>
-        @setState {collections}
-      .catch (e) -> throw new Error('Error getting collections', e)
+    auth.checkCurrent().then (user) =>
+      user.get('collections')
+        .then (collections) =>
+          @setState {collections}
+        .catch (e) -> throw new Error('Error getting collections', e)
 
   collectionLink: (d, i) ->
     <div key={i}>
