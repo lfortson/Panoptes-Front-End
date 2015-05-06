@@ -1,5 +1,6 @@
 React = require 'react'
 apiClient = require '../api/client'
+auth = require '../api/auth'
 
 module?.exports = React.createClass
   displayName: 'CollectionFavoritesButton'
@@ -34,12 +35,16 @@ module?.exports = React.createClass
   createFavorites: ->
     display_name = 'favorites'
     project = @props.subject.links.project
-    links = {project}
-    collection = {display_name, links}
 
-    apiClient.type('collections').create(collection).save()
-      .then (favorites) => @addSubjectTo(favorites)
-      .catch (e) -> throw new Error(e)
+    auth.checkCurrent().then (user) =>
+      owner = {id: user.id.toString(), type: "users"}
+      links = {project, owner}
+      collection = {display_name, links}
+
+      apiClient.type('collections').create(collection).save()
+        .then (favorites) =>
+          @addSubjectTo(favorites)
+        .catch (e) -> throw new Error(e)
 
   toggleFavorite: ->
     project_id = @props.subject.links.project
