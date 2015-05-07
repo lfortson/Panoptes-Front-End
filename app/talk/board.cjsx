@@ -121,7 +121,7 @@ module?.exports = React.createClass
         type="radio"
         name="role-read"
         value={data}
-        checked={if @state.board.permissions.read is data then 'checked'}/>
+        checked={@state.board.permissions.read is data}/>
       {data}
     </label>
 
@@ -130,7 +130,7 @@ module?.exports = React.createClass
       <input
         type="radio"
         name="role-write"
-        checked={if @state.board.permissions.write is data then 'checked'}
+        checked={@state.board.permissions.write is data}
         value={data}/>
       {data}
     </label>
