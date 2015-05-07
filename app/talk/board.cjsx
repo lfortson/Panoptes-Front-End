@@ -12,6 +12,7 @@ PromiseRenderer = require '../components/promise-renderer'
 Paginator = require './lib/paginator'
 Moderation = require './lib/moderation'
 ROLES = require './lib/roles'
+merge = require 'lodash.merge'
 
 module?.exports = React.createClass
   displayName: 'TalkBoard'
@@ -98,7 +99,8 @@ module?.exports = React.createClass
     @goToPage(page)
 
   onEditTitle: (e) ->
-    input = document.querySelector('.talk-edit-board-title-form input')
+    e.preventDefault()
+    input = document.querySelector('.talk-edit-board-form input')
     title = input.value
 
     # permissions
@@ -108,8 +110,7 @@ module?.exports = React.createClass
     board = {title, permissions}
 
     @boardRequest().update(board).save()
-      .then (board) =>
-        @setState {board: board[0]}
+      .then (board) => @setState {board}
       .catch (e) -> throw new Error(e)
 
   onClickNewDiscussion: ->
@@ -120,6 +121,9 @@ module?.exports = React.createClass
       <input
         type="radio"
         name="role-read"
+        onChange={=>
+          @setState board: merge {}, @state.board, {permissions: read: data}
+        }
         value={data}
         checked={@state.board.permissions.read is data}/>
       {data}
@@ -130,6 +134,9 @@ module?.exports = React.createClass
       <input
         type="radio"
         name="role-write"
+        onChange={=>
+          @setState board: merge {}, @state.board, {permissions: write: data}
+        }
         checked={@state.board.permissions.write is data}
         value={data}/>
       {data}
@@ -142,7 +149,7 @@ module?.exports = React.createClass
         <div>
           <h2>Moderator Zone:</h2>
           {if @state.board?.title
-            <form className="talk-edit-board-title-form" onSubmit={@onEditTitle}>
+            <form className="talk-edit-board-form" onSubmit={@onEditTitle}>
               <h3>Edit Title:</h3>
               <input onChange={@onChangeTitle} defaultValue={@state.board?.title}/>
 
@@ -152,7 +159,7 @@ module?.exports = React.createClass
               <h4>Can Write:</h4>
               <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
 
-              <button type="submit">Update Title</button>
+              <button type="submit">Update</button>
             </form>}
 
           <button onClick={@onClickDeleteBoard}>
