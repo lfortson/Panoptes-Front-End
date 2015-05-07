@@ -50,7 +50,6 @@ module?.exports = React.createClass
       .then (board) =>
         titleInput.value = ''
         descriptionInput.value = ''
-        console.log "board save successul", board
         @setBoards()
       .catch (e) => throw new Error(e)
 
