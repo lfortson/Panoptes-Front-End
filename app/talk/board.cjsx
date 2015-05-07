@@ -100,12 +100,14 @@ module?.exports = React.createClass
 
   onEditTitle: (e) ->
     e.preventDefault()
-    input = document.querySelector('.talk-edit-board-form input')
+    form = React.findDOMNode(@).querySelector('.talk-edit-board-form')
+
+    input = form.querySelector('input')
     title = input.value
 
     # permissions
-    read = @getDOMNode().querySelector(".roles-read input[name='role-read']:checked").value
-    write = @getDOMNode().querySelector(".roles-write input[name='role-write']:checked").value
+    read = form.querySelector(".roles-read input[name='role-read']:checked").value
+    write = form.querySelector(".roles-write input[name='role-write']:checked").value
     permissions = {read, write}
     board = {title, permissions}
 
