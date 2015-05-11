@@ -66,10 +66,8 @@ module?.exports = React.createClass
         display_name = getFavoritesName(project)
         # check for a favorites collection in project first
         apiClient.type('collections').get({project_id, display_name}).index(0)
-
           .then (favorites) =>
             # try to request subject from favorites collection, otherwise create it
-
             if !!favorites
               apiClient.type('subjects').get(collection_id: favorites.id, id: @props.subject.id).index(0)
                 .then (subject) =>

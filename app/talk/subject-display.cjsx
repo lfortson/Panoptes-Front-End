@@ -27,12 +27,15 @@ module?.exports = React.createClass
             .catch (e) -> throw new Error(e)
 
   collectionCheckbox: (d, i) ->
-    <label key={i} >
-      <input
-        type="checkbox"
-        onChange={=> @toggleCollectionMembership(d.id)} />
-        {d.display_name}
-    </label>
+    <PromiseRenderer promise={apiClient.type('subjects').get(@props.focusId.toString())}>{(subject) =>
+      <label key={i} >
+        <input
+          type="checkbox"
+          onChange={=> @toggleCollectionMembership(d.id)} />
+          {d.display_name}
+      </label>
+    }</PromiseRenderer>
+    
 
   render: ->
     <div className="talk-subject-display">

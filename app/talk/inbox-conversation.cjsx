@@ -33,7 +33,7 @@ module?.exports = React.createClass
   setConversation: ->
     conversation_id = @props.params?.conversation?.toString()
     # skip cache so messages marked as unread
-    talkClient.type('conversations').get(conversation_id, skipCache: true)
+    talkClient.type('conversations').get(conversation_id, {})
       .then (conversation) =>
         @setState {conversation}, @setMessagesMeta
       .catch (e) -> throw new Error(e)
