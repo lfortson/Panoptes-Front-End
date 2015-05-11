@@ -27,15 +27,12 @@ module?.exports = React.createClass
             .catch (e) -> throw new Error(e)
 
   collectionCheckbox: (d, i) ->
-    <PromiseRenderer promise={}>{(subject) =>
-      <label key={i} >
-        <input
-          type="checkbox"
-          onChange={=> @toggleCollectionMembership(d.id)} />
-          {d.display_name}
-      </label>
-    }</PromiseRenderer>
-    
+    <label key={i}>
+      <input
+        type="checkbox"
+        onChange={=> @toggleCollectionMembership(d.id)} />
+        {d.display_name}
+    </label>
 
   render: ->
     <div className="talk-subject-display">
@@ -44,8 +41,8 @@ module?.exports = React.createClass
         <div>
           {if @state.collectionFormOpen
             <div>
-              <h1>Collect!</h1>
-              <PromiseRenderer promise={apiClient.type('collections').get()}>{(collections) =>
+              <h1>Collect! {subject.id}</h1>
+              <PromiseRenderer promise={apiClient.type('collections').get({project_id: subject.links.project})}>{(collections) =>
                 <div>
                   <div>{collections.map(@collectionCheckbox)}</div>
                   <FavoritesButton subject={subject} />
