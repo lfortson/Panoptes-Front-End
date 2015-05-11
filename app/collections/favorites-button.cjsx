@@ -1,11 +1,7 @@
 React = require 'react'
 apiClient = require '../api/client'
 auth = require '../api/auth'
-
-getFavoritesName = (project) ->
-  #--> Naming Convention: "Favorites for #{project_name}"
-  #    Prevents global uniqueness validation conflict under project scope
-  "Favorites for #{project?.display_name}"
+getFavoritesName = require './get-favorites-name'
 
 module?.exports = React.createClass
   displayName: 'CollectionFavoritesButton'

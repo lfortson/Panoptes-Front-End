@@ -27,7 +27,7 @@ module?.exports = React.createClass
             .catch (e) -> throw new Error(e)
 
   collectionCheckbox: (d, i) ->
-    <PromiseRenderer promise={apiClient.type('subjects').get(@props.focusId.toString())}>{(subject) =>
+    <PromiseRenderer promise={}>{(subject) =>
       <label key={i} >
         <input
           type="checkbox"
