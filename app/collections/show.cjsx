@@ -16,7 +16,7 @@ module?.exports = React.createClass
     collection: {}
 
   componentWillMount: ->
-    @setData(1)
+    @setData(1) # start on page 1
 
   subjectsRequest: (page) ->
     collection_id = @props.params?.collection_id
@@ -36,9 +36,6 @@ module?.exports = React.createClass
   goToPage: (n) ->
     @transitionTo(@props.path, @props.params, {page: n})
     @setData(n)
-
-  componentWillUpdate: (p, s) ->
-    console.log "s.subjects", s.subjects
 
   subject: (d, i) ->
     # 'http://' may need to prefix some older subjects...
