@@ -19,6 +19,8 @@ module?.exports = React.createClass
   componentWillMount: ->
     project_id = @props.subject.links.project.toString()
 
+    # see if the subject is in the project's favorites collection
+    # to see if it's favoriters
     apiClient.type('projects').get(project_id)
       .then (project) =>
         display_name = getFavoritesName(project)
