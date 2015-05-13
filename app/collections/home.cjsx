@@ -2,8 +2,11 @@ React = require 'react'
 CollectionCreateForm = require './create-form'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
+authClient = require '../api/auth'
 auth = require '../api/auth'
 {Link} = require 'react-router'
+ChangeListener = require '../components/change-listener'
+PromiseRenderer = require '../components/promise-renderer'
 
 module?.exports = React.createClass
   displayName: 'CollectionsHome'
@@ -30,6 +33,13 @@ module?.exports = React.createClass
 
   render: ->
     <div className="collections-home">
-      <CollectionCreateForm />
-      {@state.collections.map(@collectionLink)}
+      <ChangeListener target={authClient}>{=>
+        <PromiseRenderer promise={authClient.checkCurrent()}>{(user) =>
+          if user?
+            <div>
+              <CollectionCreateForm />
+              {@state.collections.map(@collectionLink)}
+            </div>
+        }</PromiseRenderer>
+      }</ChangeListener>
     </div>
