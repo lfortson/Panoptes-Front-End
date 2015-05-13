@@ -11,53 +11,15 @@ module?.exports = React.createClass
   propTypes:
     focusId: React.PropTypes.number
 
-  getInitialState: ->
-    collectionFormOpen: true
-
-  toggleCollectionForm: (e) ->
-    @setState collectionFormOpen: !@state.collectionFormOpen
-
-  toggleCollectionMembership: (collectionId) ->
-    apiClient.type('collections', {})
-      .get(collectionId.toString())
-        .then (collection) =>
-          collection.addLink('subjects', [@props.focusId.toString()])
-            .then (coll) =>
-              console.log "collection subjects added", collection
-            .catch (e) -> throw new Error(e)
-
-  collectionCheckbox: (d, i) ->
-    <label key={i}>
-      <input
-        type="checkbox"
-        onChange={=> @toggleCollectionMembership(d.id)} />
-        {d.display_name}
-    </label>
-
   render: ->
     <div className="talk-subject-display">
       <PromiseRenderer promise={apiClient.type('subjects').get(@props.focusId.toString())}>{(subject) =>
-
         <div>
-          {if @state.collectionFormOpen
-            <div>
-              <h1>Collect! {subject.id}</h1>
-              <PromiseRenderer promise={apiClient.type('collections').get({project_id: subject.links.project})}>{(collections) =>
-                <div>
-                  <div>{collections.map(@collectionCheckbox)}</div>
-                  <FavoritesButton subject={subject} />
-                </div>
-              }</PromiseRenderer>
-            </div>
-            }
-
           <a href={getSubjectLocation(subject).src} target="_blank">
             <img src={getSubjectLocation(subject).src} />
           </a>
           <p>Subject {subject.id}</p>
-          <span onClick={@toggleCollectionForm}>
-            <i className="fa fa-th" />
-          </span>
+          <FavoritesButton subject={subject} />
         </div>
       }</PromiseRenderer>
     </div>
