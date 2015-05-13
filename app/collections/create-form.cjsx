@@ -1,5 +1,4 @@
 React = require 'react'
-talkClient = require '../api/talk'
 apiClient = require '../api/client'
 
 module?.exports = React.createClass
