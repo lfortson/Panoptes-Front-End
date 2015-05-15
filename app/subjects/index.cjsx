@@ -22,7 +22,9 @@ module?.exports = React.createClass
         @setState {subject}
 
   comment: (data, i) ->
-    <p key={data.id}>{data.body}</p>
+    <p key={data.id} className="talk-module">
+      {data.body}
+    </p>
 
   render: ->
     {subject} = @state
